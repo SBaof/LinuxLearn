@@ -1,0 +1,7 @@
+首先你要安装两个需要的包。
+$ sudo apt-get install enscript ghostscript 
+准备工作完成之后，按照下面的两步从文本文件生成一个PDF文件
+首先，使用enscript命令行工具将文本文件转换成postscript格式。
+$ enscript -p output.ps input.txt 
+最后将postscript格式文件转换成PDF文件。
+$ ps2pdf output.ps output.pdf 
