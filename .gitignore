@@ -31,3 +31,5 @@
 # Debug files
 *.dSYM/
 
+# file
+unpv13e/*
