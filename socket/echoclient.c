@@ -157,7 +157,7 @@ void echo_cli(int sock)
         }
         else if(ret == 0)
         {
-            printf("client closed\n");
+            printf("return here,client closed\n");
             break;
         }
 

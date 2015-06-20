@@ -87,7 +87,9 @@ void echo_cln(int sockfd)
     int n;
     while(fgets(sendbuf.buf, sizeof(sendbuf.buf), stdin)!=NULL)
     {
-        n = sizeof(sendbuf.buf);
+        n = strlen(sendbuf.buf);
+        //printf("strlen(sendbuf.buf): %d\n", strlen(sendbuf.buf));
+        //printf("sizeof(sendbuf.buf): %d\n", sizeof(sendbuf.buf));
         sendbuf.len = htonl(n);
         writen(sockfd, &sendbuf, 4+n);
 

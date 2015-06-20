@@ -8,6 +8,8 @@
 #include<stdlib.h>
 #include<errno.h>
 #include<string.h>
+#include<signal.h>
+#include<sys/wait.h>
 
 #define ERR_EXIT(m) \
         do \
@@ -21,6 +23,18 @@ typedef struct packet_
     int len;
     char buf[1024];
 }packet;
+
+void handle(int signum)
+{
+    if(signum == SIGCHLD)
+    {
+        int mypid;
+        while((mypid=waitpid(-1, NULL, WNOHANG)) > 0)
+        {
+            printf("get the child, pid: %d\n", mypid);
+        }
+    }
+}
 
 ssize_t readn(int fd, void *buf, size_t count)
 {
@@ -124,6 +138,8 @@ int main(int argc, const char *argv[])
         printf("Usage:%s ip_addr, ip_port\n", argv[0]);
         return -1;
     }
+
+    signal(SIGCHLD, handle);
 
     const char *ip = argv[1];
     int port = atoi(argv[2]);
