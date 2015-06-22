@@ -100,6 +100,7 @@ void do_service(int conn)
         memset(&recvbuf, 0, sizeof(recvbuf));
 
         int ret = readn(conn, &recvbuf.len, 4);
+        printf("ret:%d\n", ret);
         if(ret == -1)
         {
             ERR_EXIT("readn");
@@ -111,17 +112,18 @@ void do_service(int conn)
         }
 
         n = ntohl(recvbuf.len);
-       // printf("recvbuf.len=%d\n", n);
         ret = readn(conn, recvbuf.buf, n);
         if(ret == -1)
         {
             ERR_EXIT("readn");
         }
-        else if(ret < n)
+        else if(ret < n )//|| n==0)
         {
             printf("client closed\n");
             break;
         }
+
+        printf("1.recvbuf.len=%d\n", n);
 
         fputs(recvbuf.buf, stdout);
 
