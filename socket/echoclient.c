@@ -77,6 +77,7 @@ ssize_t writen(int fd, const void *buf, size_t count)
     return count;
 }
 
+/*
 ssize_t recv_peek(int sockfd, void *buf, size_t len)
 {
     while(1)
@@ -139,6 +140,44 @@ ssize_t readline(int sockfd, void *buf, size_t maxline)
         bufp += nread;
     }
     return -1;
+}
+*/
+
+
+ssize_t readline(int sockfd, void *vptr, size_t maxlen)
+{
+    ssize_t n, rc;
+    char c, *ptr;
+
+    ptr = vptr;
+    for(n=1; n<maxlen; n++)
+    {
+        again:
+        if((rc=read(sockfd, &c, 1)) == 1)
+        {
+            *ptr++ = c;
+            if(c == '\n')
+            {
+                break;//new line is stored, like fgets();
+            }
+        }
+        else if(rc == 0)
+        {
+            *ptr = 0;
+            return (n-1);//EOF, n-1 bytes were read
+        }
+        else
+        {
+            if(errno == EINTR)
+            {
+                goto again;
+            }
+            return -1; //error, errno set by read
+        }
+    }
+
+    *ptr = 0; //null terminate like fgets()
+    return n;
 }
 
 void echo_cli(int sock)
